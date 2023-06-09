@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: wordpress-pod
+  labels:
+    app: wordpress
+  namespace: wp
+spec:
+  containers:
+  - name: wp-cotr
+    image: wordpress
+    ports:
+    - containerPort: 80
+    env:
+      - name: WORDPRESS_DB_HOST
+        value: mysql-svc
+      - name: WORDPRESS_DB_USER
+        value: exampleuser
+      - name: WORDPRESS_DB_PASSWORD
+        value: examplepass
+      - name: WORDPRESS_DB_NAME
+        value: exampledb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-svc
+  namespace: wp
+spec:
+  type: NodePort
+  selector:
+    app: wordpress
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 31007
