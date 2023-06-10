@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pgsql-pod
+  labels:
+    app: pgsql
+  namespace: odoo
+spec:
+  containers:
+  - name: pgsql-contr
+    image: postgres
+    ports:
+    - containerPort: 5432
+    env:
+    - name: POSTGRES_DB
+      value: postgres
+    - name: POSTGRES_USER
+      value: odoo
+    - name: POSTGRES_PASSWORD
+      value: kanzalpass
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgsql-service
+  namespace: odoo
+spec:
+  selector:
+    app: pgsql
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
